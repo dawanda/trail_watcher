@@ -2,9 +2,10 @@ class Trail
   include Mongoid::Document
   include Mongoid::Timestamps
   embeds_many :visits
+  TIMEOUT = 1.hour
 
   def self.track!(options)
-    unless options[:id] and trail = find_by_id(options[:id])
+    unless options[:id] and trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
       trail = create!
     end
     trail.id
