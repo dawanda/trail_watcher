@@ -35,7 +35,7 @@ describe Trail do
 
     it "adds visits" do
       id = Trail.track!(:path => 'yyy')
-      Trail.find_by_id(id).visits.count.should == 1
+      Trail.find_by_id(id).paths.should == ['yyy']
     end
 
     it "fails without path" do
@@ -44,13 +44,13 @@ describe Trail do
 
     it "tracks referrer as visit" do
       id = Trail.track!(:path => 'yyy', :referrer => 'xxx')
-      Trail.find_by_id(id).visits.map(&:path).should == ['xxx','yyy']
+      Trail.find_by_id(id).paths.should == ['xxx','yyy']
     end
 
     it "does not track referrer as visit for existing trails" do
       id = Trail.track!(:path => 'yyy')
       Trail.track!(:path => 'zzz', :referrer => 'xxx', :id => id)
-      Trail.find_by_id(id).visits.map(&:path).should == ['yyy','zzz']
+      Trail.find_by_id(id).paths.should == ['yyy','zzz']
     end
 
     it "sets attributes" do

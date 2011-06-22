@@ -1,8 +1,9 @@
 class Trail
   include Mongoid::Document
   include Mongoid::Timestamps
-  embeds_many :visits
+
   field :account_state, :type => String # registered, relogin, login
+  field :path, :type => String # ;/foo;/bar;
 
   TIMEOUT = 1.hour
 
@@ -12,12 +13,16 @@ class Trail
     attributes = Hash[options.select{|k,v| k.to_s.starts_with?('data-')}.map{|k,v| [k.sub('data-',''),v] }]
 
     if options[:id] and trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
-      trail.update_attributes(attributes)
+      trail.update_attributes(attributes.merge(:path => trail.path + options[:path] + ';'))
     else
-      trail = create!(attributes)
-      trail.visits.create!(:path => options[:referrer]) if options[:referrer].present?
+      path = ';' + [options[:referrer], options[:path]].reject(&:blank?).join(';') + ';'
+      trail = create!(attributes.merge(:path => path))
     end
-    trail.visits.create!(:path => options[:path])
+
     trail.id
+  end
+
+  def paths
+    path.to_s[1..-2].split(';')
   end
 end
