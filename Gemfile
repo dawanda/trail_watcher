@@ -11,6 +11,7 @@ gem "rspec-rails", ">= 2.6.1", :group => [:development, :test]
 gem "bson_ext", ">= 1.3.1"
 gem "mongoid", ">= 2.0.2"
 gem "newrelic_rpm"
+gem "kaminari"
 
 group :test do
   gem "database_cleaner", ">= 0.6.7"

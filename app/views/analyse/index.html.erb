@@ -1,0 +1,12 @@
+<%= form_tag '?', :method => :get do %>
+  From <%= params_text_field_tag :from %> &nbsp;&nbsp; To <%= params_text_field_tag :to %><br/>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+
+<% @trails.each do |trail| %>
+  Trails <%= trail.id %><br/>
+  <% trail.visits.each do |visit| %>
+    <%= visit.path %><br/>
+  <% end %>
+<% end %>
