@@ -27,6 +27,7 @@ tmp/*
 /config/config.yml
 /config/database.yml
 /config/mongoid.yml
+/config/newrelic.yml
 /coverage.data
 /coverage/
 /db/*.javadb/
