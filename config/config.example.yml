@@ -1,0 +1,8 @@
+test:
+
+development:
+
+production:
+  auth:
+    name: bla
+    password: blub
