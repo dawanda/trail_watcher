@@ -31,5 +31,10 @@ describe TrailsController do
         get 'track', :path => '/xxx'
       }.should_not change{Trail.count}
     end
+
+    it "can set attributes" do
+      get 'track', :path => '/xxx', 'data-account_state' => 'registered'
+      Trail.find_by_id(request.cookies[:trail_watcher_trail_id]).account_state.should == 'registered'
+    end
   end
 end

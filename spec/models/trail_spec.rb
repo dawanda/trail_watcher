@@ -52,5 +52,18 @@ describe Trail do
       Trail.track!(:path => 'zzz', :referrer => 'xxx', :id => id)
       Trail.find_by_id(id).visits.map(&:path).should == ['yyy','zzz']
     end
+
+    it "sets attributes" do
+      id = Trail.track!(:path => 'yyy', 'data-account_state' => 'registered')
+      Trail.find_by_id(id).account_state.should == 'registered'
+    end
+
+    it "updates attributes" do
+      lambda{
+        id = Trail.track!(:path => 'xxx')
+        id = Trail.track!(:path => 'yyy', 'data-account_state' => 'registered', :id => id)
+        Trail.find_by_id(id).account_state.should == 'registered'
+      }.should change{Trail.count}.by(+1)
+    end
   end
 end
