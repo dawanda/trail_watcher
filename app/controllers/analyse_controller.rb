@@ -8,7 +8,7 @@ class AnalyseController < ApplicationController
     @path_trails = params[:paths].map do |k,path|
       next if path.blank?
       paths << path
-      [path, Trail.all_in('path' => /;#{paths.join(';.*;')}/).count]
+      [path, Trail.where('path' => /;#{paths.join(';(.*;)?')};/).count]
     end.compact
   end
 end
