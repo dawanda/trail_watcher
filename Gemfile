@@ -4,7 +4,7 @@ gem 'json'
 #gem 'sass-rails', "~> 3.1.0.rc"
 #gem 'coffee-script'
 #gem 'uglifier'
-#gem 'jquery-rails'
+gem 'jquery-rails'
 #gem "therubyracer", ">= 0.8.2"
 gem "SystemTimer", :platform => :ruby_18
 gem "rspec-rails", ">= 2.6.1", :group => [:development, :test]
