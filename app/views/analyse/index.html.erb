@@ -1,5 +1,5 @@
 <%= form_tag '?', :method => :get do %>
-  Analyse paths<br/>
+  Funnel paths<br/>
   <%= params_text_field_tag 'paths[0]' %><br/>
   <%= params_text_field_tag 'paths[1]' %><br/>
   <%= params_text_field_tag 'paths[2]' %><br/>
@@ -7,8 +7,32 @@
   <%= submit_tag 'Search' %>
 <% end %>
 
-<% if @path_trails.present? %>
-  <% @path_trails.each do |path, count| %>
-    <%= path %> <%= count %><br/>
-  <% end %>
-<% end %>
+<div id="chart_div"></div>
+
+<script src="https://www.google.com/jsapi"></script>
+<script>
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Path')
+    data.addColumn('number', 'Visitors(%)')
+    data.addColumn('number', 'Visitors(%)')
+
+    var json = <%= @path_trails.to_json.html_safe %>
+    data.addRows(json.length)
+    var full = json[0][1]
+
+    for(var i=0;i<json.length;i++){
+      data.setValue(i, 0, json[i][0]);
+      data.setValue(i, 1, json[i][1] * 100 / full);
+      data.setValue(i, 2, json[i][1] * 100 / full);
+    }
+
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+    chart.draw(data, {
+      width: 800, height: 400, title: 'Funnel',
+      vAxis: {title: 'Path', titleTextStyle: {color: 'red'}}
+    });
+  }
+</script>
