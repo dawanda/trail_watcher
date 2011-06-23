@@ -16,7 +16,7 @@ class Trail
   def self.track!(options)
     raise unless options[:path]
     path = options[:path].gsub(SEPARATOR,'-sep-')
-    referrer = options[:referrer].gsub(SEPARATOR,'-sep-')
+    referrer = options[:referrer].to_s.gsub(SEPARATOR,'-sep-')
     tags = options[:tags].to_s.split(',').reject(&:blank?)
 
     if options[:id] and trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
