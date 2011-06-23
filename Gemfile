@@ -5,7 +5,7 @@ gem 'json'
 #gem 'coffee-script'
 gem 'uglifier'
 gem 'jquery-rails'
-#gem "therubyracer", ">= 0.8.2"
+gem "therubyracer", ">= 0.8.2"
 gem "SystemTimer", :platform => :ruby_18
 gem "bson_ext", ">= 1.3.1"
 gem "mongoid", ">= 2.0.2"
