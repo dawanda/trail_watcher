@@ -20,6 +20,15 @@ Mark the visitor as registered user coming from facebook.
 
     /analyse
 
+Deploy
+======
+
+ - add servers to config.yml
+ - prepare server dirs
+ - `cap production deploy:cold`
+ - add configs to /srv/#{target}/shared/config/
+ - deploy as usual
+
 TODO
 ====
 Set dynamic ttl

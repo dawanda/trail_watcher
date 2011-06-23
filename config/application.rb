@@ -13,6 +13,7 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 $LOAD_PATH.unshift 'lib'
 require 'cfg'
+CFG = CFGLoader.load[Rails.env]
 
 module TrailWatcher
   class Application < Rails::Application

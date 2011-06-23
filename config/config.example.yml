@@ -6,3 +6,14 @@ production:
   auth:
     name: bla
     password: blub
+
+  deploy:
+    servers:
+      - foo
+      - bar
+
+staging:
+  deploy:
+    servers:
+      - foo
+      - bar
