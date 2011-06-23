@@ -45,6 +45,16 @@ describe TrailsController do
       }.should_not change{Trail.count}
     end
 
+    it "reuses trail cookie on start" do
+      id = Trail.track!(:path => '/xxx')
+      request.cookies[:trail_watcher_trail_id] = id
+      lambda{
+        lambda{
+          get 'track', :path => '/xxx', :start => 1
+        }.should change{Trail.find_by_id(id).path}
+      }.should_not change{Trail.count}
+    end
+
     it "can set tags" do
       get 'track', :path => '/xxx', :tags => 'registered', :start => 1
       Trail.find_by_id(response.cookies['trail_watcher_trail_id']).tags.should == ['registered']
