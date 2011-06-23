@@ -7,7 +7,7 @@ set :scm, :git
 set :repository, "git://github.com/dawanda/trail_watcher.git"
 set :branch, ENV['BRANCH'] || "master"
 
-set :deploy_to, '/srv/trail_watcher'
+set :deploy_to, '/srv/trailwatcher'
 set :keep_releases, 5
 
 set :user, 'deploy'
