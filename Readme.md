@@ -5,10 +5,10 @@ records visitor paths into mongodb so we can query them and see what our visitor
 ### Track visit:
     <img src="http://localhost:3000/track?path=#{CGI.escape(request.request_uri)}&referrer=#{CGI.escape(equest.referrer)}" />
 
-### Set markers
-Mark the visitor as registered user.
+### Set tags
+Mark the visitor as registered user coming from facebook.
 
-    <img src="http://localhost:3000/track?...&data-registered=true" />
+    <img src="http://localhost:3000/track?...&tags=registered,via-facebook" />
 
 ### Analyse
 
