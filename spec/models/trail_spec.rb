@@ -53,16 +53,24 @@ describe Trail do
       Trail.find_by_id(id).paths.should == ['yyy','zzz']
     end
 
-    it "sets attributes" do
-      id = Trail.track!(:path => 'yyy', 'data-account_state' => 'registered')
-      Trail.find_by_id(id).account_state.should == 'registered'
+    it "sets tags" do
+      id = Trail.track!(:path => 'yyy', :tags => 'registered,facebook')
+      Trail.find_by_id(id).tags.should == ['registered','facebook']
     end
 
-    it "updates attributes" do
+    it "adds tags" do
       lambda{
-        id = Trail.track!(:path => 'xxx')
-        id = Trail.track!(:path => 'yyy', 'data-account_state' => 'registered', :id => id)
-        Trail.find_by_id(id).account_state.should == 'registered'
+        id = Trail.track!(:path => 'xxx', :tags => 'registered')
+        id = Trail.track!(:path => 'yyy', :tags => 'facebook', :id => id)
+        Trail.find_by_id(id).tags.should == ['registered','facebook']
+      }.should change{Trail.count}.by(+1)
+    end
+
+    it "does not add duplicate tags" do
+      lambda{
+        id = Trail.track!(:path => 'xxx', :tags => 'registered')
+        id = Trail.track!(:path => 'yyy', :tags => 'registered', :id => id)
+        Trail.find_by_id(id).tags.should == ['registered']
       }.should change{Trail.count}.by(+1)
     end
   end

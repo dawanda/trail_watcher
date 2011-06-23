@@ -2,13 +2,24 @@ class AnalyseController < ApplicationController
   http_basic_authenticate_with CFG[:auth] if CFG[:auth]
 
   def index
-    return if params[:paths].empty?
+    @tags = Trail.where.distinct(:tags).sort
+
+    all_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
+    compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
+
+    return if all_paths.empty? or compare.empty?
 
     paths = []
-    @path_trails = params[:paths].map do |k,path|
-      next if path.blank?
+    @path_trails = all_paths.map do |path|
       paths << path
-      [path, Trail.where('path' => /;#{paths.join(';(.*;)?')};/).count]
-    end.compact
+
+      scope = Trail.where(:path => /;#{paths.join(';(.*;)?')};/)
+
+      counts = compare.sort.map do |tag|
+        scope.where(:tags => tag).count
+      end
+
+      [path] + counts
+    end
   end
 end

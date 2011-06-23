@@ -2,21 +2,20 @@ class Trail
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :account_state, :type => String # registered, relogin, login
   field :path, :type => String # ;/foo;/bar;
+  field :tags, :type => Array # registered, relogin, login
 
   TIMEOUT = 1.hour
 
   def self.track!(options)
     raise unless options[:path]
-
-    attributes = Hash[options.select{|k,v| k.to_s.starts_with?('data-')}.map{|k,v| [k.sub('data-',''),v] }]
+    tags = options[:tags].to_s.split(',').reject(&:blank?)
 
     if options[:id] and trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
-      trail.update_attributes(attributes.merge(:path => trail.path + options[:path] + ';'))
+      trail.update_attributes(:path => trail.path + options[:path] + ';', :tags => (trail.tags + tags).uniq)
     else
       path = ';' + [options[:referrer], options[:path]].reject(&:blank?).join(';') + ';'
-      trail = create!(attributes.merge(:path => path))
+      trail = create!(:path => path, :tags => tags.uniq)
     end
 
     trail.id

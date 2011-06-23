@@ -4,6 +4,16 @@
   <%= params_text_field_tag 'paths[1]' %><br/>
   <%= params_text_field_tag 'paths[2]' %><br/>
   <%= params_text_field_tag 'paths[3]' %><br/>
+  <%= params_text_field_tag 'paths[4]' %><br/>
+  <%= params_text_field_tag 'paths[5]' %><br/>
+  <%= params_text_field_tag 'paths[6]' %><br/>
+  <br/>
+
+  Compare<br/>
+  A: <%= select_options_tag 'compare[0]', ['']+@tags %> <br/>
+  B: <%= select_options_tag 'compare[1]', ['']+@tags %> <br/>
+  C: <%= select_options_tag 'compare[2]', ['']+@tags %> <br/>
+
   <%= submit_tag 'Search' %>
 <% end %>
 
@@ -15,18 +25,25 @@
   google.setOnLoadCallback(drawChart);
   function drawChart() {
     var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Path')
-    data.addColumn('number', 'Visitors(%)')
-    data.addColumn('number', 'Visitors(%)')
-
     var json = <%= @path_trails.to_json.html_safe %>
-    data.addRows(json.length)
+    var columns = json[0].length
+    var rows = json.length
+
+    data.addRows(rows) // add rows and columns
+
+    data.addColumn('string', 'Path')
+    // add a column for all counts
+    for(var i=1;i<columns;i++){
+      data.addColumn('number', 'Visitors(%)')
+    }
+
     var full = json[0][1]
 
-    for(var i=0;i<json.length;i++){
-      data.setValue(i, 0, json[i][0]);
-      data.setValue(i, 1, json[i][1] * 100 / full);
-      data.setValue(i, 2, json[i][1] * 100 / full);
+    for(var i=0;i<rows;i++){
+      data.setValue(i, 0, json[i][0]) // first: path
+      for(var j=1;j<columns;j++){
+        data.setValue(i, j, json[i][j] * 100 / full) // counts: in %
+      }
     }
 
     var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
