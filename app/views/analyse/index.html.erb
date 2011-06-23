@@ -37,11 +37,10 @@
       data.addColumn('number', 'Visitors(%)')
     }
 
-    var full = json[0][1]
-
     for(var i=0;i<rows;i++){
       data.setValue(i, 0, json[i][0]) // first: path
       for(var j=1;j<columns;j++){
+        var full = json[0][j]
         data.setValue(i, j, json[i][j] * 100 / full) // counts: in %
       }
     }
