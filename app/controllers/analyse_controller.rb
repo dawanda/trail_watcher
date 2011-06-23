@@ -13,8 +13,7 @@ class AnalyseController < ApplicationController
     @path_trails = all_paths.map do |path|
       paths << path
 
-      scope = Trail.where(:path => /;#{paths.join(';(.*;)?')};/)
-
+      scope = Trail.with_paths_in_order(paths)
       counts = compare.sort.map do |tag|
         scope.where(:tags => tag).count
       end
