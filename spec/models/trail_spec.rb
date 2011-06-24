@@ -74,6 +74,31 @@ describe Trail do
           Trail.find_by_id(id).tags.should == ['registered']
         }.should change{Trail.count}.by(+1)
       end
+
+      it "does not add tags from the same group" do
+        id = Trail.track!(:path => 'xxx', :tags => 'register')
+        id = Trail.track!(:path => 'yyy', :tags => 'login', :id => id)
+        Trail.find_by_id(id).tags.should == ['register']
+      end
+
+      it "does not add tags from the same group in same request" do
+        id = Trail.track!(:path => 'xxx', :tags => 'register,login')
+        Trail.find_by_id(id).tags.should == ['register']
+      end
+    end
+  end
+
+  describe :unique_tag_groups do
+    it "leaves non-unique alone" do
+      Trail.unique_tag_groups(['a','b'], [['a','c'],['b','d']]).should == ['a','b']
+    end
+
+    it "leaves removes duplicates" do
+      Trail.unique_tag_groups(['a','b','c'], [['a','b']]).should == ['a','c']
+    end
+
+    it "leaves removes duplicates in order" do
+      Trail.unique_tag_groups(['b','a','c'], [['a','b']]).should == ['b','c']
     end
   end
 end

@@ -1,8 +1,16 @@
+common: &common
+  tag_groups:
+    - [login, register, logged-in, facebook]
+    - [facebook_login, facebook_register]
+
 test:
+  <<: *common
 
 development:
+  <<: *common
 
 production:
+  <<: *common
   auth:
     name: bla
     password: blub
@@ -13,6 +21,7 @@ production:
       - bar
 
 staging:
+  <<: *common
   deploy:
     servers:
       - foo
