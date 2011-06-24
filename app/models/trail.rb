@@ -16,18 +16,22 @@ class Trail
   def self.track!(options)
     raise unless options[:path]
 
-    path = options[:path].gsub(SEPARATOR,'-sep-')
-    referrer = options[:referrer].to_s.gsub(SEPARATOR,'-sep-')
-    tags = options[:tags].to_s.split(',').reject(&:blank?)
-
-    if options[:id] and trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
-      trail.update_attributes(:path => trail.path + path + SEPARATOR, :tags => unique_tag_groups(trail.tags + tags, CFG[:tag_groups] || []).uniq)
-    else
-      path = SEPARATOR + [referrer, path].reject(&:blank?).join(SEPARATOR) + SEPARATOR
-      trail = create!(:path => path, :tags => unique_tag_groups(tags, CFG[:tag_groups] || []))
+    unless trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
+      trail = create!(:path => SEPARATOR)
+      trail.append_path options[:referrer]
     end
 
+    all_tags = ((trail.tags || []) + options[:tags].to_s.split(',').reject(&:blank?)).uniq
+
+    trail.append_path options[:path]
+    trail.tags = unique_tag_groups(all_tags, CFG[:tag_groups] || [])
+    trail.save!
+
     trail.id
+  end
+
+  def append_path(path)
+    self.path += path.gsub(SEPARATOR,'-sep-') + SEPARATOR if path.present?
   end
 
   def paths
