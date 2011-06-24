@@ -1,20 +1,30 @@
 Total: <%= Trail.count %>
 
 <%= form_tag '?', :method => :get do %>
-  Funnel paths<br/>
-  <%= params_text_field_tag 'paths[0]' %><br/>
-  <%= params_text_field_tag 'paths[1]' %><br/>
-  <%= params_text_field_tag 'paths[2]' %><br/>
-  <%= params_text_field_tag 'paths[3]' %><br/>
-  <%= params_text_field_tag 'paths[4]' %><br/>
-  <%= params_text_field_tag 'paths[5]' %><br/>
-  <%= params_text_field_tag 'paths[6]' %><br/>
-  <br/>
+  <div style="width: 300px; float:left">
+    Funnel paths<br/>
+    <%= params_text_field_tag 'paths[0]' %><br/>
+    <%= params_text_field_tag 'paths[1]' %><br/>
+    <%= params_text_field_tag 'paths[2]' %><br/>
+    <%= params_text_field_tag 'paths[3]' %><br/>
+    <%= params_text_field_tag 'paths[4]' %><br/>
+    <%= params_text_field_tag 'paths[5]' %><br/>
+    <%= params_text_field_tag 'paths[6]' %><br/>
+  </div>
 
-  Compare<br/>
-  A: <%= select_options_tag 'compare[0]', ['','all']+@tags %> <br/>
-  B: <%= select_options_tag 'compare[1]', ['','all']+@tags %> <br/>
-  C: <%= select_options_tag 'compare[2]', ['','all']+@tags %> <br/>
+  <div style="width: 300px; float:left">
+    Compare<br/>
+    A: <%= select_options_tag 'compare[0]', ['','all']+@tags %> <br/>
+    B: <%= select_options_tag 'compare[1]', ['','all']+@tags %> <br/>
+    C: <%= select_options_tag 'compare[2]', ['','all']+@tags %> <br/>
+    D: <%= select_options_tag 'compare[3]', ['','all']+@tags %> <br/>
+    <br/><br/>
+
+    Bars<br/>
+    <%= select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %>
+  </div>
+
+  <div style="clear:both"></div>
 
   <%= submit_tag 'Search' %>
 <% end %>
@@ -30,19 +40,22 @@ Total: <%= Trail.count %>
     var json = <%= @path_trails.to_json.html_safe %>
     var columns = json[0].length
     var rows = json.length
+    var compare = <%= @compare.to_json.html_safe %>
+    var bars = <%= params[:bars].to_json.html_safe %>
 
     data.addRows(rows) // add rows and columns
 
     data.addColumn('string', 'Path')
+
     // add a column for all counts
     for(var i=1;i<columns;i++){
-      data.addColumn('number', '% of '+json[0][i])
+      data.addColumn('number', compare[i-1] + ' % of ' + json[0][i])
     }
 
     for(var i=0;i<rows;i++){
       data.setValue(i, 0, json[i][0]) // first: path
       for(var j=1;j<columns;j++){
-        var full = json[0][j]
+        var full = (bars == 'first' ? json[0][j] : (i == 0 ? json[i][j] : json[i-1][j]))
         data.setValue(i, j, json[i][j] * 100 / full) // counts: in %
       }
     }
