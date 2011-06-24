@@ -5,7 +5,7 @@ class Trail
   field :path, :type => String # ;/foo;/bar;
   field :tags, :type => Array # registered, relogin, login
 
-  TIMEOUT = 1.hour
+  TIMEOUT = 5.minutes
   SEPARATOR = ';'
   MATCH_ANY_PATH_IN_BETWEEN = ";(.*;)?"
 
