@@ -10,9 +10,9 @@
   <br/>
 
   Compare<br/>
-  A: <%= select_options_tag 'compare[0]', ['']+@tags %> <br/>
-  B: <%= select_options_tag 'compare[1]', ['']+@tags %> <br/>
-  C: <%= select_options_tag 'compare[2]', ['']+@tags %> <br/>
+  A: <%= select_options_tag 'compare[0]', ['','all']+@tags %> <br/>
+  B: <%= select_options_tag 'compare[1]', ['','all']+@tags %> <br/>
+  C: <%= select_options_tag 'compare[2]', ['','all']+@tags %> <br/>
 
   <%= submit_tag 'Search' %>
 <% end %>

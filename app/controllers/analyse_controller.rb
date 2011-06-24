@@ -15,7 +15,11 @@ class AnalyseController < ApplicationController
 
       scope = Trail.with_paths_in_order(paths)
       counts = compare.sort.map do |tag|
-        scope.where(:tags => tag).count
+        if tag == 'all'
+          scope.count
+        else
+          scope.where(:tags => tag).count
+        end
       end
 
       [path] + counts
