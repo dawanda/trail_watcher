@@ -45,6 +45,10 @@ class AnalyseController < ApplicationController
 
   private
 
+  def local_request?
+    true # errors for production
+  end
+
   def prepare_selected_paths
     @selected_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
     render :action => params[:action] if @selected_paths.empty?
