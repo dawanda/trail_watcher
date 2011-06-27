@@ -20,8 +20,8 @@ Total: <%= Trail.count %>
     D: <%= select_options_tag 'compare[3]', ['','all']+@tags %> <br/>
     <br/><br/>
 
-    Bars<br/>
-    <%= select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %>
+    Bars <%= select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %><br/>
+    Paths in between <%= select_options_tag 'between', ['',0,1,2,3,4,5] %><br/>
   </div>
 
   <div style="clear:both"></div>

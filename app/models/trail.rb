@@ -7,10 +7,11 @@ class Trail
 
   TIMEOUT = 5.minutes
   SEPARATOR = ';'
-  MATCH_ANY_PATH_IN_BETWEEN = ";(.*;)?"
 
-  def self.with_paths_in_order(paths)
-    where :path => /#{SEPARATOR}#{paths.join MATCH_ANY_PATH_IN_BETWEEN}#{SEPARATOR}/
+  def self.with_paths_in_order(paths, options={})
+    paths = paths.map{|p| "#{p};" }
+    path_matcher = paths.join "([^;]*;){0,#{options[:between] || 2}}"
+    where :path => /;#{path_matcher}/
   end
 
   def self.track!(options)

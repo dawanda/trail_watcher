@@ -13,7 +13,7 @@ class AnalyseController < ApplicationController
     @path_trails = all_paths.map do |path|
       paths << path
 
-      scope = Trail.with_paths_in_order(paths)
+      scope = Trail.with_paths_in_order(paths, :between => params[:between])
       counts = @compare.map do |tag|
         if tag == 'all'
           scope.count
