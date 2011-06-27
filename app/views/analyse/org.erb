@@ -16,6 +16,7 @@ Total: <%= @full %> / <%= Trail.count %>
 
   <div style="width: 300px; float:left">
     Tag: <%= select_options_tag 'compare[0]', ['']+@tags %> <br/>
+    Show: <%= select_options_tag 'show', ['','start'] %> <br/>
   </div>
 
   <div style="clear:both"></div>

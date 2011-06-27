@@ -20,3 +20,13 @@ class Hash
     end
   end
 end
+
+
+class Array
+  def index_of_elements_in_order(elements)
+    each_with_index do |e,i|
+      return i if slice(i,elements.size) == elements
+    end
+    nil
+  end
+end

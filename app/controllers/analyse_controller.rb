@@ -30,6 +30,8 @@ class AnalyseController < ApplicationController
     @tags = Trail.tags
     return unless @selected_paths.present?
 
+    show_start = params[:show] == 'start'
+
     # get newest data so we see some change
     @full = 10000
     @data = Trail.with_paths_in_order(@selected_paths, :between => 0).limit(@full).order('id desc').to_a
@@ -38,9 +40,15 @@ class AnalyseController < ApplicationController
     # find out where they went to
     @data = @data.map{|t| t.path.split(Trail::SEPARATOR).reject(&:blank?) }
     @data = @data.map do |paths|
-      index = paths.index(@selected_paths.last) or raise('WTF')
-      paths[index+1] || 'END'
+      index = paths.index_of_elements_in_order(@selected_paths) or raise('WTF')
+      if show_start
+        paths[index-1] || 'START'
+      else
+        paths[index + @selected_paths.size + 1] || 'END'
+      end
     end
+
+    @selected_paths.reverse! if show_start
 
     # targets as % of total
     @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.sort
