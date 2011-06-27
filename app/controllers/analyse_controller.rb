@@ -33,10 +33,10 @@ class AnalyseController < ApplicationController
     show_start = params[:show] == 'start'
 
     # get newest trails -> current data
-    trails = Trail.with_paths_in_order(@selected_paths, :between => 0).limit(10000).order('id desc').to_a
+    trails = Trail.with_paths_in_order(@selected_paths).limit(10000).order('id desc').to_a
     @full = trails.size
 
-    # find their next/prev path
+    # find their next/prev path and count em
     found_paths = Hash.new(0)
     trails.each do |trail|
       paths = trail.paths

@@ -10,7 +10,7 @@ class Trail
 
   def self.with_paths_in_order(paths, options={})
     paths = paths.map{|p| "#{p};" }
-    path_matcher = paths.join "([^;]*;){0,#{options[:between] || 2}}"
+    path_matcher = paths.join "([^;]*;){0,#{options[:between] || 0}}"
     where :path => /;#{path_matcher}/
   end
 
