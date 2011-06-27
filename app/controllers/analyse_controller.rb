@@ -44,7 +44,7 @@ class AnalyseController < ApplicationController
       found_path = if show_start
         paths[index-1] || 'START'
       else
-        paths[index + @selected_paths.size + 1] || 'END'
+        paths[index + @selected_paths.size] || 'END'
       end
       found_paths[found_path] += 1
     end
