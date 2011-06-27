@@ -37,20 +37,22 @@ class AnalyseController < ApplicationController
     @full = trails.size
 
     # find their next/prev path
-    @data = trails.map do |trail|
+    found_paths = Hash.new(0)
+    trails.each do |trail|
       paths = trail.paths
       index = paths.index_of_elements_in_order(@selected_paths) or raise('WTF')
-      if show_start
+      found_path = if show_start
         paths[index-1] || 'START'
       else
         paths[index + @selected_paths.size + 1] || 'END'
       end
+      found_paths[found_path] += 1
     end
 
     @selected_paths.reverse! if show_start
 
-    # targets as % of total
-    @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.select{|k,v| v >= 0.5}.sort_by(&:last).reverse
+    # found_paths as % of total
+    @data = found_paths.map{|k,v| [k, v * 100.0 / @full] }.select{|k,v| v >= 0.5}.sort_by(&:last).reverse
   end
 
   private
