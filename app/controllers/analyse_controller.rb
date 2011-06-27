@@ -4,10 +4,9 @@ class AnalyseController < ApplicationController
   rescue_from Exception, :with => :render_simple_error if Rails.env.production?
 
   def index
-    @tags = Trail.tags
     @compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
 
-    return unless @selected_paths and @compare
+    return unless @selected_paths.present? and @compare
 
     paths = []
     @data = @selected_paths.map do |path|
@@ -27,7 +26,8 @@ class AnalyseController < ApplicationController
   end
 
   def org
-    return unless @selected_paths
+    @tags = Trail.tags
+    return unless @selected_paths.present?
 
     # get newest data so we see some change
     @full = 10000
@@ -37,7 +37,7 @@ class AnalyseController < ApplicationController
     # find out where they went to
     @data = @data.map{|t| t.path.split(Trail::SEPARATOR).reject(&:blank?) }
     @data = @data.map do |paths|
-      index = paths.index(@selected_paths.first) or raise('WTF')
+      index = paths.index(@selected_paths.last) or raise('WTF')
       paths[index+1] || 'END'
     end
 
