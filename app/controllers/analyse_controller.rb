@@ -1,6 +1,7 @@
 class AnalyseController < ApplicationController
   http_basic_authenticate_with CFG[:auth] if CFG[:auth]
   before_filter :prepare_selected_paths, :only => [:index, :org]
+  rescue_from Exception, :with => :render_simple_error if Rails.env.production?
 
   def index
     @tags = Trail.tags
