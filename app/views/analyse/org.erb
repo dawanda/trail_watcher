@@ -31,6 +31,7 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
 <script src="https://www.google.com/jsapi"></script>
 <script>
   var selected_paths = <%= @selected_paths.to_json.html_safe %>
+  var show = <%= params[:show].to_json.html_safe %>
 
   function drawPaths(paths){
     var paths = [''].concat(paths.filter(function(p){return p!=''})).concat([''])
@@ -71,7 +72,13 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
 
   // load more on click
   $('#chart_div .data-node').live('click', function(){
-    drawPaths(selected_paths.concat([$(this).attr('data-node')]))
+    if(show == 'start'){
+      selected_paths.unshift($(this).attr('data-node'))
+    } else {
+      selected_paths.push($(this).attr('data-node'))
+    }
+
+    drawPaths(selected_paths)
     $('#org-form').submit()
   })
 </script>
