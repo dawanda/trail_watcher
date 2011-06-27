@@ -62,6 +62,6 @@ class AnalyseController < ApplicationController
   private
 
   def prepare_selected_paths
-    @selected_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
+    @selected_paths = (params[:paths]||[]).select{|v|v.present?}
   end
 end

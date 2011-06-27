@@ -9,9 +9,7 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
 <%= form_tag '?', :method => :get, :id => 'org-form' do %>
   <div style="width: 300px; float:left">
     Path:<br/>
-    <% 7.times do |i| %>
-      <%= params_text_field_tag "paths[#{i}]" %><br/>
-    <% end %>
+    <div id="paths"></div>
   </div>
 
   <div style="width: 300px; float:left">
@@ -32,13 +30,24 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
 
 <script src="https://www.google.com/jsapi"></script>
 <script>
+  var selected_paths = <%= @selected_paths.to_json.html_safe %>
+
+  function drawPaths(paths){
+    var paths = [''].concat(paths.filter(function(p){return p!=''})).concat([''])
+    $('#paths').html($.map(paths, function(path){ return '<input type="text" name="paths[]" value="'+path+'" />' }).join('<br/>'))
+  }
+
+  function getPaths(){
+    return $('#paths input').map(function(){ return this.value })
+  }
+
+  drawPaths(selected_paths)
+
   google.load('visualization', '1', {packages:['orgchart']});
   google.setOnLoadCallback(drawChart);
 
   function drawChart() {
     var data = <%= @data.to_json.html_safe %>
-    var selected_paths = <%= @selected_paths.to_json.html_safe %>
-
     var graph = new google.visualization.DataTable();
     graph.addColumn('string', 'Name');
     graph.addColumn('string', 'Manager');
@@ -54,7 +63,7 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
       var label = '<span class="data-node" data-node="' + path + '">'+ path + '<br/> ' + data[i][1] + '</span>'
       graph.addRow([{v: path, f:label},last])
     }
-    
+
     var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
     chart.draw(graph, {allowHtml:true});
   }
@@ -62,8 +71,7 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
 
   // load more on click
   $('#chart_div .data-node').live('click', function(){
-    // fill first empty input with current path
-    $($('#org-form input[type=text]').filter('input[value=]')[0]).val($(this).attr('data-node'))
+    drawPaths(selected_paths.concat([$(this).attr('data-node')]))
     $('#org-form').submit()
   })
 </script>

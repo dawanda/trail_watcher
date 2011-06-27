@@ -4,7 +4,7 @@ Total: <%= Trail.count %>
   <div style="width: 300px; float:left">
     Funnel path:<br/>
     <% 7.times do |i| %>
-      <%= params_text_field_tag "paths[#{i}]" %><br/>
+      <%= params_text_field_tag "paths[]" %><br/>
     <% end %>
   </div>
 
