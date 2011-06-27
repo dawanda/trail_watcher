@@ -54,16 +54,16 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
     graph.addColumn('string', 'Manager');
 
     // selected paths
-    for(var i=0;i<selected_paths.length;i++){
-      graph.addRow([selected_paths[i], i == 0 ? '' : selected_paths[i-1]])
-    }
+    $.each(selected_paths, function(i,e){
+      graph.addRow([e, i == 0 ? '' : selected_paths[i-1]])
+    })
 
     var last = selected_paths[selected_paths.length-1]
-    for(var i=0;i<data.length;i++){
-      var path = data[i][0]
-      var label = '<span class="data-node" data-node="' + path + '">'+ path + '<br/> ' + data[i][1] + '</span>'
+    $.each(data, function(i,e){
+      var path = e[0]
+      var label = '<span class="data-node" data-node="' + path + '">'+ path + '<br/> ' + e[1] + '</span>'
       graph.addRow([{v: path, f:label},last])
-    }
+    })
 
     var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
     chart.draw(graph, {allowHtml:true});

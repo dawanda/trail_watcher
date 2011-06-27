@@ -54,11 +54,6 @@ class AnalyseController < ApplicationController
     @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.select{|k,v| v >= 0.5}.sort_by(&:last).reverse
   end
 
-  # render errors
-  def local?
-    true
-  end
-
   private
 
   def prepare_selected_paths
