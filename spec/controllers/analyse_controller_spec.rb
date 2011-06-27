@@ -10,7 +10,7 @@ describe AnalyseController do
 
     it "renders with input" do
       Trail.create!(:path => ';/xxx;/yyy;')
-      get :index, :paths => {'0' => '/xxx'}, :compare => {'0' => 'all'}
+      get :index, :paths => ['/xxx'], :compare => {'0' => 'all'}
       response.should render_template(:index)
       assigns[:data].should == [['/xxx',1]]
     end
@@ -20,7 +20,7 @@ describe AnalyseController do
       Trail.create!(:path => ';/xxx;/yyy;', :tags => ['register'])
       Trail.create!(:path => ';/xxx;/yyy;', :tags => ['login'])
       Trail.create!(:path => ';/xxx;/yyy;')
-      get :index, :paths => {'0' => '/xxx'}, :compare => {'0' => 'all', '1' => 'register'}
+      get :index, :paths => ['/xxx'], :compare => {'0' => 'all', '1' => 'register'}
       response.should render_template(:index)
       assigns[:data].should == [["/xxx", 4, 2]]
     end
@@ -35,7 +35,7 @@ describe AnalyseController do
 
     it "renders with input" do
       Trail.create!(:path => ';/xxx;/yyy;')
-      get :org, :paths => {'0' => '/xxx', '1' => '/yyy'}
+      get :org, :paths => ['/xxx', '/yyy']
       response.should render_template(:org)
       assigns[:selected_paths].should == ['/xxx','/yyy']
       assigns[:data].should == [["END", 100.0]]
@@ -47,9 +47,9 @@ describe AnalyseController do
       Trail.create!(:path => ';/xxx;/yyy;', :tags => ['register'])
       Trail.create!(:path => ';/xxx;/yyy;', :tags => ['login'])
       Trail.create!(:path => ';/xxx;/yyy;')
-      get :org, :paths => {'0' => '/xxx', '1' => '/yyy'}, :show => 'start'
+      get :org, :paths => ['/xxx', '/yyy'], :show => 'start'
       assigns[:selected_paths].should == ['/yyy','/xxx']
-      assigns[:data].should == [["/foo", 20.0], ["/yyy", 80.0]]
+      assigns[:data].should == [["/yyy", 80.0], ["/foo", 20.0]]
     end
   end
 end

@@ -32,14 +32,13 @@ class AnalyseController < ApplicationController
 
     show_start = params[:show] == 'start'
 
-    # get newest data so we see some change
-    @full = 10000
-    @data = Trail.with_paths_in_order(@selected_paths, :between => 0).limit(@full).order('id desc').to_a
-    @full = @data.size # in case we got less
+    # get newest trails -> current data
+    trails = Trail.with_paths_in_order(@selected_paths, :between => 0).limit(10000).order('id desc').to_a
+    @full = trails.size
 
-    # find out where they went to
-    @data = @data.map{|t| t.path.split(Trail::SEPARATOR).reject(&:blank?) }
-    @data = @data.map do |paths|
+    # find their next/prev path
+    @data = trails.map do |trail|
+      paths = trail.paths
       index = paths.index_of_elements_in_order(@selected_paths) or raise('WTF')
       if show_start
         paths[index-1] || 'START'
