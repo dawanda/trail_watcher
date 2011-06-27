@@ -2,6 +2,7 @@ class AnalyseController < ApplicationController
   http_basic_authenticate_with CFG[:auth] if CFG[:auth]
 
   before_filter :prepare_selected_paths, :only => [:index, :org]
+  rescue_from Exception, :with => :render_error
 
   def index
     @tags = Trail.tags
@@ -44,10 +45,6 @@ class AnalyseController < ApplicationController
   end
 
   private
-
-  def local_request?
-    true # errors for production
-  end
 
   def prepare_selected_paths
     @selected_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
