@@ -4,6 +4,7 @@ class AnalyseController < ApplicationController
   rescue_from Exception, :with => :render_simple_error if Rails.env.production?
 
   def index
+    @tags = Trail.tags
     @compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
 
     return unless @selected_paths.present? and @compare

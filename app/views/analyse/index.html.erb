@@ -2,14 +2,10 @@ Total: <%= Trail.count %>
 
 <%= form_tag '?', :method => :get do %>
   <div style="width: 300px; float:left">
-    Funnel paths<br/>
-    <%= params_text_field_tag 'paths[0]' %><br/>
-    <%= params_text_field_tag 'paths[1]' %><br/>
-    <%= params_text_field_tag 'paths[2]' %><br/>
-    <%= params_text_field_tag 'paths[3]' %><br/>
-    <%= params_text_field_tag 'paths[4]' %><br/>
-    <%= params_text_field_tag 'paths[5]' %><br/>
-    <%= params_text_field_tag 'paths[6]' %><br/>
+    Funnel path:<br/>
+    <% 7.times do |i| %>
+      <%= params_text_field_tag "paths[#{i}]" %><br/>
+    <% end %>
   </div>
 
   <div style="width: 300px; float:left">
@@ -27,6 +23,7 @@ Total: <%= Trail.count %>
   <div style="clear:both"></div>
 
   <%= submit_tag 'Search' %>
+  <%= button_tag 'Org-chart', :onclick => "this.form.action = '/analyse/org'; this.form.submit()"  %>
 <% end %>
 
 <div id="chart_div"></div>

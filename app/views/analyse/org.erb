@@ -9,13 +9,9 @@ Total: <%= @full %> / <%= Trail.count %>
 <%= form_tag '?', :method => :get do %>
   <div style="width: 300px; float:left">
     Path:<br/>
-    <%= params_text_field_tag 'paths[0]' %><br/>
-    <%= params_text_field_tag 'paths[1]' %><br/>
-    <%= params_text_field_tag 'paths[2]' %><br/>
-    <%= params_text_field_tag 'paths[3]' %><br/>
-    <%= params_text_field_tag 'paths[4]' %><br/>
-    <%= params_text_field_tag 'paths[5]' %><br/>
-    <%= params_text_field_tag 'paths[6]' %><br/>
+    <% 7.times do |i| %>
+      <%= params_text_field_tag "paths[#{i}]" %><br/>
+    <% end %>
   </div>
 
   <div style="width: 300px; float:left">
