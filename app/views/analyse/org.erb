@@ -1,0 +1,44 @@
+<style>
+  #chart_div > table{
+    float:left;
+  }
+</style>
+
+Total: <%= @full %> / <%= Trail.count %>
+
+<%= form_tag '?', :method => :get do %>
+  <%= params_text_field_tag 'paths[0]' %><br/>
+  <%= submit_tag 'Show' %>
+<% end %>
+
+<div id="chart_div"></div>
+
+<script src="https://www.google.com/jsapi"></script>
+<script>
+  google.load('visualization', '1', {packages:['orgchart']});
+  google.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = <%= @data.to_json.html_safe %>
+    var selected_paths = <%= @selected_paths.to_json.html_safe %>
+
+    var graph = new google.visualization.DataTable();
+    graph.addColumn('string', 'Name');
+    graph.addColumn('string', 'Manager');
+
+    // selected paths
+    for(var i=0;i<selected_paths.length;i++){
+      graph.addRow([selected_paths[i],''])
+    }
+
+    var last = selected_paths[selected_paths.length-1]
+    for(var i=0;i<data.length;i++){
+      var path = data[i][0]
+      var label = path + '<br/> ' + data[i][1]
+      graph.addRow([{v: path, f:label},last])
+    }
+    
+    var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+    chart.draw(graph, {allowHtml:true});
+  }
+</script>

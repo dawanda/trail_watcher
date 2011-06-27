@@ -101,4 +101,12 @@ describe Trail do
       Trail.unique_tag_groups(['b','a','c'], [['a','b']]).should == ['b','c']
     end
   end
+
+  describe :tags do
+    it "has sorted unique tags" do
+      Trail.create!(:tags => ['b','a'])
+      Trail.create!(:tags => ['b','c'])
+      Trail.tags.should == ['a','b','c']
+    end
+  end
 end

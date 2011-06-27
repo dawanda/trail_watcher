@@ -1,16 +1,14 @@
 class AnalyseController < ApplicationController
   http_basic_authenticate_with CFG[:auth] if CFG[:auth]
 
+  before_filter :prepare_selected_paths, :only => [:index, :org]
+
   def index
-    @tags = Trail.where.distinct(:tags).sort
-
-    all_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
+    @tags = Trail.tags
     @compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
-
-    return if all_paths.empty? or @compare.empty?
-
+    
     paths = []
-    @path_trails = all_paths.map do |path|
+    @data = @selected_paths.map do |path|
       paths << path
 
       scope = Trail.with_paths_in_order(paths, :between => params[:between])
@@ -24,5 +22,31 @@ class AnalyseController < ApplicationController
 
       [path] + counts
     end
+  end
+
+  def org
+    @tags = Trail.tags
+
+    # get newest data so we see some change
+    @full = 10000
+    @data = Trail.with_paths_in_order(@selected_paths, :between => 0).limit(@full).order('id desc').to_a
+    @full = @data.size # in case we got less
+
+    # find out where they went to
+    @data = @data.map{|t| t.path.split(Trail::SEPARATOR).reject(&:blank?) }
+    @data = @data.map do |paths|
+      index = paths.index(@selected_paths.first) or raise('WTF')
+      paths[index+1] || 'END'
+    end
+
+    # targets as % of total
+    @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.sort
+  end
+
+  private
+
+  def prepare_selected_paths
+    @selected_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
+    render :action => params[:action] if @selected_paths.empty?
   end
 end

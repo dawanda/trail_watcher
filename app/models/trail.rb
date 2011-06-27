@@ -39,6 +39,10 @@ class Trail
     path.to_s[1..-2].split(SEPARATOR)
   end
 
+  def self.tags
+    where.distinct(:tags).sort
+  end
+
   private
 
   # remove all but one tag from the same group

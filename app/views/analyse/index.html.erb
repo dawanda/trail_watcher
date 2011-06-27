@@ -37,7 +37,7 @@ Total: <%= Trail.count %>
   google.setOnLoadCallback(drawChart);
   function drawChart() {
     var data = new google.visualization.DataTable();
-    var json = <%= @path_trails.to_json.html_safe %>
+    var json = <%= @data.to_json.html_safe %>
     var columns = json[0].length
     var rows = json.length
     var compare = <%= @compare.to_json.html_safe %>
