@@ -6,7 +6,9 @@ class AnalyseController < ApplicationController
   def index
     @tags = Trail.tags
     @compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
-    
+
+    return unless @selected_paths and @compare
+
     paths = []
     @data = @selected_paths.map do |path|
       paths << path
@@ -25,7 +27,7 @@ class AnalyseController < ApplicationController
   end
 
   def org
-    @tags = Trail.tags
+    return unless @selected_paths
 
     # get newest data so we see some change
     @full = 10000
@@ -52,6 +54,5 @@ class AnalyseController < ApplicationController
 
   def prepare_selected_paths
     @selected_paths = (params[:paths]||{}).select{|k,v|v.present?}.sort.map(&:last)
-    render :action => params[:action] if @selected_paths.empty?
   end
 end
