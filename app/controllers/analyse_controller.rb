@@ -51,7 +51,7 @@ class AnalyseController < ApplicationController
     @selected_paths.reverse! if show_start
 
     # targets as % of total
-    @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.select{|k,v| v >= 0.5}.sort_by(&:last)
+    @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.select{|k,v| v >= 0.5}.sort_by(&:last).reverse
   end
 
   # render errors
