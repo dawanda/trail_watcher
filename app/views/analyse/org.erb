@@ -6,7 +6,7 @@
 
 Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
 
-<%= form_tag '?', :method => :get do %>
+<%= form_tag '?', :method => :get, :id => 'org-form' do %>
   <div style="width: 300px; float:left">
     Path:<br/>
     <% 7.times do |i| %>
@@ -18,8 +18,8 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
     Tag: <%= select_options_tag 'compare[0]', ['']+@tags %> <br/>
     Show:
     <% start = (params[:show] == 'start') %>
-    <%= params_radio_button_with_label 'show', 'start', 'start', :value => start %>
-    <%= params_radio_button_with_label 'show', 'end', 'end', :value => !start %>
+    <%= params_radio_button_with_label 'show', 'start', 'coming from', :value => start %>
+    <%= params_radio_button_with_label 'show', 'end', 'going to', :value => !start %>
     <br/>
   </div>
 
@@ -51,11 +51,19 @@ Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
     var last = selected_paths[selected_paths.length-1]
     for(var i=0;i<data.length;i++){
       var path = data[i][0]
-      var label = path + '<br/> ' + data[i][1]
+      var label = '<span class="data-node" data-node="' + path + '">'+ path + '<br/> ' + data[i][1] + '</span>'
       graph.addRow([{v: path, f:label},last])
     }
     
     var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
     chart.draw(graph, {allowHtml:true});
   }
+
+
+  // load more on click
+  $('#chart_div .data-node').live('click', function(){
+    // fill first empty input with current path
+    $($('#org-form input[type=text]').filter('input[value=]')[0]).val($(this).attr('data-node'))
+    $('#org-form').submit()
+  })
 </script>
