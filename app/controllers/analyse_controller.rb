@@ -1,8 +1,6 @@
 class AnalyseController < ApplicationController
   http_basic_authenticate_with CFG[:auth] if CFG[:auth]
-
   before_filter :prepare_selected_paths, :only => [:index, :org]
-  rescue_from Exception, :with => :render_error
 
   def index
     @tags = Trail.tags
@@ -42,6 +40,11 @@ class AnalyseController < ApplicationController
 
     # targets as % of total
     @data = @data.group_by{|x|x}.map{|k,v| [k, v.size * 100.0 / @full] }.sort
+  end
+
+  # render errors
+  def local?
+    true
   end
 
   private
