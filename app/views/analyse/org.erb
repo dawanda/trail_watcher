@@ -1,6 +1,17 @@
 <style>
-  #chart_div > table{
-    float:left;
+  #chart{
+    padding: 20px;
+    border-spacing: 10px;
+  }
+
+  #chart .data-node{
+    padding: 10px;
+    border: 1px solid #B5D9EA;
+    background: #EDF7FF;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+    vertical-align: middle;
   }
 </style>
 
@@ -26,9 +37,22 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
   <%= submit_tag 'Show' %>
 <% end %>
 
-<div id="chart_div"></div>
+<% columns = @data.size %>
+<table id="chart">
+  <% @selected_paths.each do |path| %>
+    <tr>
+      <td class="data-node" colspan="<%= columns %>"><%= path %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <% @data.each do |path, percent| %>
+      <td class="data-node" data-node="<%= path %>">
+        <%= path %><br/><%= percent.round(2) %>
+      </td>
+    <% end %>
+  </tr>
+</table>
 
-<script src="https://www.google.com/jsapi"></script>
 <script>
   var selected_paths = <%= @selected_paths.to_json.html_safe %>
   var show = <%= params[:show].to_json.html_safe %>
@@ -44,34 +68,8 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
 
   drawPaths(selected_paths)
 
-  google.load('visualization', '1', {packages:['orgchart']});
-  google.setOnLoadCallback(drawChart);
-
-  function drawChart() {
-    var data = <%= @data.to_json.html_safe %>
-    var graph = new google.visualization.DataTable();
-    graph.addColumn('string', 'Name');
-    graph.addColumn('string', 'Manager');
-
-    // selected paths
-    $.each(selected_paths, function(i,e){
-      graph.addRow([e, i == 0 ? '' : selected_paths[i-1]])
-    })
-
-    var last = selected_paths[selected_paths.length-1]
-    $.each(data, function(i,e){
-      var path = e[0]
-      var label = '<span class="data-node" data-node="' + path + '">'+ path + '<br/> ' + e[1] + '</span>'
-      graph.addRow([{v: path, f:label},last])
-    })
-
-    var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-    chart.draw(graph, {allowHtml:true});
-  }
-
-
   // load more on click
-  $('#chart_div .data-node').live('click', function(){
+  $('#chart .data-node').live('click', function(){
     if(show == 'start'){
       selected_paths.unshift($(this).attr('data-node'))
     } else {

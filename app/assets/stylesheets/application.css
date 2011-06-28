@@ -5,6 +5,10 @@
  *= require_self
  *= require_tree .
 */
+body{
+  font-family: Helvetica, sans-serif;
+}
+
 #flash_notice, #flash_alert {
   padding: 5px 8px;
   margin: 10px 0;
@@ -17,4 +21,3 @@
   background-color: #FCC;
   border: solid 1px #C66;
 }
-
