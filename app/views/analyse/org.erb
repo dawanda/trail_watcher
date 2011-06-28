@@ -4,7 +4,7 @@
   }
 </style>
 
-Total: <%= @full %> / <%= Trail.count %> (<0.5% ignored)
+Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
 
 <%= form_tag '?', :method => :get, :id => 'org-form' do %>
   <div style="width: 300px; float:left">

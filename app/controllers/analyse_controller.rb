@@ -4,10 +4,7 @@ class AnalyseController < ApplicationController
   rescue_from Exception, :with => :render_simple_error if Rails.env.production?
 
   def index
-    @tags = Trail.tags
-    @compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
-
-    return unless @selected_paths.present? and @compare
+    return unless @selected_paths.present? and @compare.present?
 
     paths = []
     @data = @selected_paths.map do |path|
@@ -27,16 +24,15 @@ class AnalyseController < ApplicationController
   end
 
   def org
-    @tags = Trail.tags
     return unless @selected_paths.present?
 
-    show_start = params[:show] == 'start'
-
     # get newest trails -> current data
-    trails = Trail.with_paths_in_order(@selected_paths).limit(10000).order('id desc').to_a
-    @full = trails.size
+    scope = Trail.with_paths_in_order(@selected_paths).limit(10000).order('id desc')
+    scope = scope.where(:tags => @compare.first) if @compare.first
+    trails = scope.to_a
 
-    # find their next/prev path and count em
+    # count path before/after selected_path
+    show_start = (params[:show] == 'start')
     found_paths = Hash.new(0)
     trails.each do |trail|
       paths = trail.paths
@@ -52,12 +48,16 @@ class AnalyseController < ApplicationController
     @selected_paths.reverse! if show_start
 
     # found_paths as % of total
-    @data = found_paths.map{|k,v| [k, v * 100.0 / @full] }.select{|k,v| v >= 0.5}.sort_by(&:last).reverse
+    @full = trails.size
+    @min = 0.5
+    @data = found_paths.map{|k,v| [k, v * 100.0 / @full] }.select{|k,v| v >= @min}.sort_by(&:last).reverse
   end
 
   private
 
   def prepare_selected_paths
+    @tags = Trail.tags
     @selected_paths = (params[:paths]||[]).select{|v|v.present?}
+    @compare = (params[:compare]||{}).select{|k,v|v.present?}.sort.map(&:last)
   end
 end
