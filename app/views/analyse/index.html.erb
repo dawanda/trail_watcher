@@ -11,7 +11,7 @@ Total: <%= Trail.count %>
   <div style="width: 300px; float:left">
     Compare<br/>
     <% 7.times do |i| %>
-      <%= select_options_tag 'compare[i]', ['','all']+@tags %> <br/>
+      <%= select_options_tag "compare[#{i}]", ['','all']+@tags %> <br/>
     <% end %>
     <br/><br/>
 
