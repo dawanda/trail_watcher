@@ -7,3 +7,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+Array.prototype.remove=function(s){
+  var index = this.indexOf(s);
+  if(this.indexOf(s) != -1) this.splice(index, 1);
+}

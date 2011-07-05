@@ -41,7 +41,9 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
 <table id="chart">
   <% @selected_paths.each do |path| %>
     <tr>
-      <td class="data-node" colspan="<%= columns %>"><%= path %></td>
+      <td class="data-node" colspan="<%= columns %>" data-node="<%= path %>" data-selected="true">
+        <%= path %>
+      </td>
     </tr>
   <% end %>
   <tr>
@@ -70,10 +72,17 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
 
   // load more on click
   $('#chart .data-node').live('click', function(){
-    if(show == 'start'){
-      selected_paths.unshift($(this).attr('data-node'))
+    var path = $(this).attr('data-node')
+    if ($(this).attr('data-selected')){
+      // remove the path
+      selected_paths.remove(path)
     } else {
-      selected_paths.push($(this).attr('data-node'))
+      // add the path
+      if(show == 'start'){
+        selected_paths.unshift(path)
+      } else {
+        selected_paths.push(path)
+      }
     }
 
     drawPaths(selected_paths)

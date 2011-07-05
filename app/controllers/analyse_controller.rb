@@ -24,7 +24,7 @@ class AnalyseController < ApplicationController
   end
 
   def org
-    return unless @selected_paths.present?
+    return @data = [] unless @selected_paths.present?
 
     # get newest trails -> current data
     scope = Trail.with_paths_in_order(@selected_paths).limit(10000).order('id desc')
