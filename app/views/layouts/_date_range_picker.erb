@@ -1,0 +1,22 @@
+<script>
+  $(function() {
+    $.datepicker._defaults.dateFormat = 'yy-mm-dd'
+
+    var dates = $( "#from, #to" ).datepicker({
+      onSelect: function( selectedDate ) {
+        var option = this.id == "from" ? "minDate" : "maxDate"
+        var instance = $( this ).data( "datepicker" )
+        var format = instance.settings.dateFormat || $.datepicker._defaults.dateFormat
+        var date = $.datepicker.parseDate(format, selectedDate, instance.settings )
+        dates.not( this ).datepicker( "option", option, date );
+      }
+    });
+  });
+</script>
+
+<div class="demo">
+  From
+  <input type="text" id="from" name="from"/><br/>
+  to
+  <input type="text" id="to" name="to"/>
+</div><!-- End demo -->

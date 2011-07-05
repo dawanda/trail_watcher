@@ -2,8 +2,9 @@
 <html>
 <head>
   <title>TrailWatcher</title>
-  <%= stylesheet_link_tag    "application" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag    "application", '/jquery/jquery-ui.css' %>
+  <%= javascript_include_tag "application", '/jquery/jquery-ui.min.js' %>
+  <script src="https://www.google.com/jsapi"></script>
   <%= csrf_meta_tags %>
 </head>
 <body>

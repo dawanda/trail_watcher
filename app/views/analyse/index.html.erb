@@ -6,6 +6,9 @@ Total: <%= Trail.count %>
     <% 7.times do |i| %>
       <%= text_field_tag "paths[]", (params[:paths]||[])[i] %><br/>
     <% end %>
+
+    <br/><br/>
+    <%= render 'layouts/date_range_picker' %>
   </div>
 
   <div style="width: 300px; float:left">
@@ -20,6 +23,7 @@ Total: <%= Trail.count %>
   </div>
 
   <div style="clear:both"></div>
+  <br/>
 
   <%= submit_tag 'Search' %>
   <%= button_tag 'Org-chart', :onclick => "this.form.action = '/analyse/org'; this.form.submit()"  %>
@@ -27,7 +31,6 @@ Total: <%= Trail.count %>
 
 <div id="chart_div"></div>
 
-<script src="https://www.google.com/jsapi"></script>
 <script>
   google.load("visualization", "1", {packages:["corechart"]});
   google.setOnLoadCallback(drawChart);
