@@ -10,10 +10,9 @@ Total: <%= Trail.count %>
 
   <div style="width: 300px; float:left">
     Compare<br/>
-    A: <%= select_options_tag 'compare[0]', ['','all']+@tags %> <br/>
-    B: <%= select_options_tag 'compare[1]', ['','all']+@tags %> <br/>
-    C: <%= select_options_tag 'compare[2]', ['','all']+@tags %> <br/>
-    D: <%= select_options_tag 'compare[3]', ['','all']+@tags %> <br/>
+    <% 7.times do |i| %>
+      <%= select_options_tag 'compare[i]', ['','all']+@tags %> <br/>
+    <% end %>
     <br/><br/>
 
     Bars <%= select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %><br/>

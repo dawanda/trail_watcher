@@ -13,5 +13,12 @@
 
 <%= yield %>
 
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/>
+
+<span title="Only one of these tags is assigned at the same time">Tag-Groups:</span><br/>
+<%= CFG[:tag_groups].map{|t|t.join(', ')}.join("<br/>").html_safe %>
+
 </body>
 </html>
