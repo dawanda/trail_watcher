@@ -14,9 +14,6 @@
   });
 </script>
 
-<div class="demo">
-  From
-  <input type="text" id="from" name="from"/><br/>
-  to
-  <input type="text" id="to" name="to"/>
-</div><!-- End demo -->
+From <%= params_text_field_tag :from %>
+<br/>
+to <%= params_text_field_tag :to %>

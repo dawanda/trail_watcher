@@ -1,0 +1,3 @@
+<% 7.times do |i| %>
+  <%= text_field_tag "paths[]", (params[:paths]||[])[i] %><br/>
+<% end %>

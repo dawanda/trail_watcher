@@ -109,4 +109,47 @@ describe Trail do
       Trail.tags.should == ['a','b','c']
     end
   end
+
+  describe :between_dates do
+    before do
+      Delorean.time_travel_to '2011-01-01 01:00:00' do
+        Trail.create!
+      end
+      Delorean.time_travel_to '2011-01-03 01:00:00' do
+        Trail.create!
+      end
+      Delorean.time_travel_to '2011-01-04 01:00:00' do
+        Trail.create!(:path => '/xxx')
+      end
+      Delorean.time_travel_to '2011-01-05 01:00:00' do
+        Trail.create!(:path => '/xxx')
+      end
+    end
+
+    it "finds with from and to" do
+      Trail.between_dates('2011-01-01', '2011-01-03').size.should == 2
+      Trail.between_dates('2011-01-01', '2011-01-02').size.should == 1
+      Trail.between_dates('2011-01-02', '2011-01-03').size.should == 1
+    end
+
+    it "finds with from or to and scope" do
+      Trail.where(:path => '/xxx').between_dates('2011-01-01', '2011-01-04').size.should == 1
+    end
+
+    it "finds without from or to" do
+      Trail.between_dates('', '').size.should == 4
+    end
+
+    it "finds without from or to and scope" do
+      Trail.where(:path => '/xxx').between_dates('', '').size.should == 2
+    end
+
+    it "finds without from" do
+      Trail.between_dates('', '2011-01-03').size.should == 2
+    end
+
+    it "finds without to" do
+      Trail.between_dates('2011-01-03','').size.should == 3
+    end
+  end
 end

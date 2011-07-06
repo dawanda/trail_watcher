@@ -43,6 +43,13 @@ class Trail
     where.distinct(:tags).sort
   end
 
+  def self.between_dates(from, to)
+    scope = where
+    scope = scope.where(:created_at.gte => from.to_time) if from.present?
+    scope = scope.where(:created_at.lte => to.to_time) if to.present?
+    scope
+  end
+
   private
 
   # remove all but one tag from the same group

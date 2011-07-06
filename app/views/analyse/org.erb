@@ -21,6 +21,8 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
   <div style="width: 300px; float:left">
     Path:<br/>
     <div id="paths"></div>
+    <br/><br/>
+    <%= render 'layouts/date_range_picker' %>
   </div>
 
   <div style="width: 300px; float:left">

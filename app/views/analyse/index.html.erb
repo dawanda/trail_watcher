@@ -3,9 +3,7 @@ Total: <%= Trail.count %>
 <%= form_tag '?', :method => :get do %>
   <div style="width: 300px; float:left">
     Funnel path:<br/>
-    <% 7.times do |i| %>
-      <%= text_field_tag "paths[]", (params[:paths]||[])[i] %><br/>
-    <% end %>
+    <%= render 'layouts/paths_selector' %>
 
     <br/><br/>
     <%= render 'layouts/date_range_picker' %>
