@@ -60,7 +60,8 @@ Total: <%= Trail.count %>
     var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
     chart.draw(data, {
       width: 800, height: 400, title: 'Funnel',
-      vAxis: {title: 'Path', titleTextStyle: {color: 'red'}, baseline: 0}
+      vAxis: {title: 'Path', titleTextStyle: {color: 'red'}},
+      hAxis: {baseline: 0}
     });
   }
 </script>
