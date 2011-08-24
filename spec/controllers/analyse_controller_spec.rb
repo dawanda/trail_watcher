@@ -24,6 +24,18 @@ describe AnalyseController do
       response.should render_template(:index)
       assigns[:data].should == [["/xxx", 4, 2]]
     end
+
+    it "compares tags with base" do
+      Trail.create!(:path => ';/xxx;/yyy;', :tags => ['register','foo'])
+      Trail.create!(:path => ';/xxx;/yyy;', :tags => ['register','foo'])
+      Trail.create!(:path => ';/xxx;/yyy;', :tags => ['register'])
+      Trail.create!(:path => ';/xxx;/yyy;', :tags => ['login'])
+      Trail.create!(:path => ';/xxx;/yyy;', :tags => ['login', 'foo'])
+      Trail.create!(:path => ';/xxx;/yyy;')
+      get :index, :paths => ['/xxx'], :compare => {'0' => 'all', '1' => 'register'}, :base_tag => 'foo'
+      response.should render_template(:index)
+      assigns[:data].should == [["/xxx", 3, 2]]
+    end
   end
 
   describe :org do

@@ -10,13 +10,11 @@ class AnalyseController < ApplicationController
     @data = @selected_paths.map do |path|
       paths << path
 
-      scope = Trail.between_dates(params[:from], params[:to]).with_paths_in_order(paths, :between => params[:between])
       counts = @compare.map do |tag|
-        if tag == 'all'
-          scope.count
-        else
-          scope.where(:tags => tag).count
-        end
+        scope = Trail.between_dates(params[:from], params[:to]).with_paths_in_order(paths, :between => params[:between])
+        tags = [(tag == 'all' ? nil : tag), params[:base_tag].presence].compact
+        scope = scope.all_in(:tags => tags) if tags.size > 0
+        scope.count
       end
 
       [path] + counts

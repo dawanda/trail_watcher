@@ -10,6 +10,8 @@ Total: <%= Trail.count %>
   </div>
 
   <div style="width: 300px; float:left">
+    Base:
+    <%= select_options_tag "base_tag", ['']+@tags %> <br/>
     Compare<br/>
     <% 7.times do |i| %>
       <%= select_options_tag "compare[#{i}]", ['','all']+@tags %> <br/>
