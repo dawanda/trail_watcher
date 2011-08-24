@@ -11,15 +11,15 @@ Total: <%= Trail.count %>
 
   <div style="width: 300px; float:left">
     Base:
-    <%= select_options_tag "base_tag", ['']+@tags %> <br/>
+    <%= params_select_options_tag "base_tag", ['']+@tags %> <br/>
     Compare<br/>
     <% 7.times do |i| %>
-      <%= select_options_tag "compare[#{i}]", ['','all']+@tags %> <br/>
+      <%= params_select_options_tag "compare[#{i}]", ['','all']+@tags %> <br/>
     <% end %>
     <br/><br/>
 
-    Bars <%= select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %><br/>
-    Paths in between <%= select_options_tag 'between', ['',0,1,2,3,4,5] %><br/>
+    Bars <%= params_select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %><br/>
+    Paths in between <%= params_select_options_tag 'between', ['',0,1,2,3,4,5] %><br/>
   </div>
 
   <div style="clear:both"></div>

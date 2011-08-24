@@ -11,7 +11,7 @@ gem "bson_ext", ">= 1.3.1"
 gem "mongoid", ">= 2.0.2"
 gem "newrelic_rpm"
 gem "kaminari"
-
+gem "helpful_fields"
 gem "rspec-rails", ">= 2.6.1", :group => [:development, :test]
 
 group :development do
