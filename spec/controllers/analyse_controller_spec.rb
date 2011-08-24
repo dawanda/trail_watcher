@@ -30,7 +30,7 @@ describe AnalyseController do
     it "renders without input" do
       get :org
       response.should render_template(:org)
-      assigns[:data].should == nil
+      assigns[:data].should == []
     end
 
     it "renders with input" do
