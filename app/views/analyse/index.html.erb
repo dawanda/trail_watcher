@@ -29,41 +29,46 @@ Total: <%= Trail.count %>
   <%= button_tag 'Org-chart', :onclick => "this.form.action = '/analyse/org'; this.form.submit()"  %>
 <% end %>
 
-<div id="chart_div"></div>
+<% if @data %>
+  <div id="chart_div"></div>
 
-<script>
-  google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = new google.visualization.DataTable();
-    var json = <%= @data.to_json.html_safe %>
-    var columns = json[0].length
-    var rows = json.length
-    var compare = <%= @compare.to_json.html_safe %>
-    var bars = <%= params[:bars].to_json.html_safe %>
+  <script>
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      var json = <%= @data.to_json.html_safe %>
+      var columns = json[0].length
+      var rows = json.length
+      var compared_tags = <%= @compare.to_json.html_safe %>
+      var compare_value_to = <%= params[:bars].to_json.html_safe %>
 
-    data.addRows(rows) // add rows and columns
+      data.addRows(rows) // add rows and columns
 
-    data.addColumn('string', 'Path')
-
-    // add a column for all counts
-    for(var i=1;i<columns;i++){
-      data.addColumn('number', compare[i-1] + ' % of ' + json[0][i])
-    }
-
-    for(var i=0;i<rows;i++){
-      data.setValue(i, 0, json[i][0]) // first: path
-      for(var j=1;j<columns;j++){
-        var full = (bars == 'first' ? json[0][j] : (i == 0 ? json[i][j] : json[i-1][j]))
-        data.setValue(i, j, json[i][j] * 100 / full) // counts: in %
+      // add Path column and 1 column for each tag
+      data.addColumn('string', 'Path')
+      for(var i=1;i<columns;i++){
+        data.addColumn('number', compared_tags[i-1] + ' % of ' + json[0][i])
       }
-    }
 
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-    chart.draw(data, {
-      width: 800, height: 400, title: 'Funnel',
-      vAxis: {title: 'Path', titleTextStyle: {color: 'red'}},
-      hAxis: {baseline: 0}
-    });
-  }
-</script>
+      // add data for path and each tag
+      for(var i=0;i<rows;i++){
+        data.setValue(i, 0, json[i][0]) // path
+
+        for(var j=1;j<columns;j++){
+          // compare to first or previous value
+          var comparison_value = (compare_value_to == 'first' ? json[0][j] : (i == 0 ? json[i][j] : json[i-1][j]))
+          var percent = roundNumber(json[i][j] * 100 / comparison_value, 2)
+          data.setValue(i, j, percent)
+        }
+      }
+
+      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+      chart.draw(data, {
+        width: 800, height: 400, title: 'Funnel',
+        vAxis: {title: 'Path', titleTextStyle: {color: 'red'}},
+        hAxis: {baseline: 0}
+      });
+    }
+  </script>
+<% end %>
