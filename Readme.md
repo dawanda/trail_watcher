@@ -20,6 +20,10 @@ Mark the visitor as registered user coming from facebook.
 
     /analyse
 
+### Copy production db to local
+
+    db.copyDatabase('trail_watcher_production', 'trail_watcher_development', HOST-IP [, username[, password]])
+
 Deploy
 ======
 
