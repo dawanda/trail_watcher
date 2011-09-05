@@ -43,7 +43,10 @@ class Trail
     where.distinct(:tags).sort
   end
 
-  def self.between_dates(from, to)
+  def self.between_dates(from, to, options={})
+    # add expanded time when time is not given
+    to += ' 23:59:59' if options[:expand_to] and to.present? and to.to_s !~ /\d\d:\d\d:\d\d/
+
     scope = where
     scope = scope.where(:created_at.gte => from.to_time) if from.present?
     scope = scope.where(:created_at.lte => to.to_time) if to.present?

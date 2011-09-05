@@ -11,7 +11,7 @@ class AnalyseController < ApplicationController
       paths << path
 
       counts = @compare.map do |tag|
-        scope = Trail.between_dates(params[:from], params[:to]).with_paths_in_order(paths, :between => params[:between])
+        scope = Trail.between_dates(params[:from], params[:to], :expand_to => true).with_paths_in_order(paths, :between => params[:between])
         tags = [(tag == 'all' ? nil : tag), params[:base_tag].presence].compact
         scope = scope.all_in(:tags => tags) if tags.size > 0
         scope.count
@@ -26,7 +26,7 @@ class AnalyseController < ApplicationController
 
     # get newest trails -> current data
     scope = Trail.
-      between_dates(params[:from], params[:to]).
+      between_dates(params[:from], params[:to], :expand_to => true).
       with_paths_in_order(@selected_paths).
       limit(10000).order('id desc')
 

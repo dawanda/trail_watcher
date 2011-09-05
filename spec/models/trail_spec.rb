@@ -151,5 +151,23 @@ describe Trail do
     it "finds without to" do
       Trail.between_dates('2011-01-03','').size.should == 3
     end
+
+    it "expands to to 23:59:59 if option is given" do
+      Delorean.time_travel_to '2011-01-01 01:01:00' do
+        Trail.create!
+      end
+
+      Trail.between_dates('2011-01-01', '2011-01-01').size.should == 1
+      Trail.between_dates('2011-01-01', '2011-01-01', :expand_to => true).size.should == 2
+    end
+
+    it "does not expand to to 23:59:59 if time is given" do
+      Delorean.time_travel_to '2011-01-01 01:01:00' do
+        Trail.create!
+      end
+
+      Trail.between_dates('2011-01-01', '2011-01-01').size.should == 1
+      Trail.between_dates('2011-01-01', '2011-01-01 00:00:00', :expand_to => true).size.should == 1
+    end
   end
 end
