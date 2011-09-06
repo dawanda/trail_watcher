@@ -4,6 +4,7 @@ class Trail
 
   field :path, :type => String # ;/foo;/bar;
   field :tags, :type => Array # registered, relogin, login
+  field :user_id, :type => Integer
 
   TIMEOUT = 5.minutes
   SEPARATOR = ';'
@@ -18,7 +19,7 @@ class Trail
     raise unless options[:path]
 
     unless trail = where(:created_at.gt => TIMEOUT.ago).find_by_id(options[:id])
-      trail = create!(:path => SEPARATOR)
+      trail = create!(:path => SEPARATOR, :user_id => options[:user_id])
       trail.append_path options[:referrer]
     end
 
@@ -51,6 +52,10 @@ class Trail
     scope = scope.where(:created_at.gte => from.to_time) if from.present?
     scope = scope.where(:created_at.lte => to.to_time) if to.present?
     scope
+  end
+
+  def self.for_user(id)
+    where(:user_id => id)
   end
 
   private

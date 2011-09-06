@@ -59,5 +59,23 @@ describe TrailsController do
       get 'track', :path => '/xxx', :tags => 'registered', :start => 1
       Trail.find_by_id(response.cookies['trail_watcher_trail_id']).tags.should == ['registered']
     end
+
+    it "gives the user a unique id" do
+      get 'track', :path => '/xxx', :start => 1
+      cookies[:trail_watcher_user_id].should_not == nil
+    end
+
+    it "does not overwrite the users id" do
+      request.cookies[:trail_watcher_user_id] = '111'
+      get 'track', :path => '/xxx', :start => 1
+      cookies[:trail_watcher_user_id].should == '111'
+    end
+
+    it "create a trail for this user" do
+      request.cookies[:trail_watcher_user_id] = '111'
+      lambda{
+        get 'track', :path => '/xxx', :start => 1
+      }.should change{Trail.for_user(111).count}.by(+1)
+    end
   end
 end
