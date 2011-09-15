@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 gem 'rails', '3.1.0'
 gem 'json'
-#gem 'sass-rails', "~> 3.1.0"
-#gem 'coffee-script'
+gem 'sass-rails', "~> 3.1.0"
+gem 'coffee-script'
 gem 'uglifier'
 gem 'jquery-rails'
 gem "therubyracer", ">= 0.8.2"
