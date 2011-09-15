@@ -5,6 +5,10 @@ records visitor paths into mongodb so we can query them and see what our visitor
  - a/b/c analysis via tags
  - funnel analysis based on visited paths
 
+### Example tracking pixel
+    <img src="http://localhost:3000/track?path=/users/index&referrer=/product/show&tags=via_ad&start=1" />
+
+
 ### Start or continue visit tracking
     <img src="http://localhost:3000/track?...&start=1" />
 
@@ -29,6 +33,7 @@ Mark the visitor as registered user coming from facebook.
     cp config/mongoid.example.yml config/mongoid.yml
     # start mongo
     rake spec
+    rails s
 
 
 ### Copy production db to local
