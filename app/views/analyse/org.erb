@@ -29,8 +29,8 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
     Tag: <%= params_select_options_tag 'compare[0]', ['']+@tags %> <br/>
     Show:
     <% start = (params[:show] == 'start') %>
-    <%= params_radio_button_with_label 'show', 'start', 'coming from', :value => start %>
-    <%= params_radio_button_with_label 'show', 'end', 'going to', :value => !start %>
+    <%= radio_button_with_label 'show', 'start', start, 'coming from' %>
+    <%= radio_button_with_label 'show', 'end', !start, 'going to' %>
     <br/>
   </div>
 
