@@ -37,7 +37,7 @@ class Trail
     if tags.size > 0
       all_in(:tags => tags)
     else
-      self
+      where()
     end
   end
 

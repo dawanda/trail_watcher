@@ -18,7 +18,7 @@ Total: <%= Trail.count %>
     <% end %>
     <br/><br/>
 
-    Bars <%= params_select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %><br/>
+    Bars <%= params_select_options_tag 'compare_to', [['% of first','first'], ['% of prev','prev']] %><br/>
     Paths in between <%= params_select_options_tag 'between', [['∞', ''],0,1,2,3,4,5] %><br/>
   </div>
 
@@ -41,7 +41,7 @@ Total: <%= Trail.count %>
       var columns = json[0].length
       var rows = json.length
       var compared_tags = <%= @compare.to_json.html_safe %>
-      var compare_value_to = <%= params[:bars].to_json.html_safe %>
+      var compare_value_to = <%= params[:compare_to].to_json.html_safe %>
 
       data.addRows(rows) // add rows and columns
 
