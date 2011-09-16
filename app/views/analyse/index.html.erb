@@ -47,19 +47,20 @@ Total: <%= Trail.count %>
 
       // add Path column and 1 column for each tag
       data.addColumn('string', 'Path')
-      for(var i=1;i<columns;i++){
-        data.addColumn('number', compared_tags[i-1] + ' % of ' + json[0][i])
+      for(var col = 1; col < columns; col++){
+        data.addColumn('number', compared_tags[col - 1] + ' % of ' + json[0][col])
       }
 
       // add data for path and each tag
-      for(var i=0;i<rows;i++){
-        data.setValue(i, 0, json[i][0]) // path
+      for(var row = 0; row < rows; row++){
+        data.setValue(row, 0, json[row][0]) // path
 
-        for(var j=1;j<columns;j++){
+        for(var col = 1; col < columns; col++){
           // compare to first or previous value
-          var comparison_value = (compare_value_to == 'first' ? json[0][j] : (i == 0 ? json[i][j] : json[i-1][j]))
-          var percent = roundNumber(json[i][j] * 100 / comparison_value, 2)
-          data.setValue(i, j, percent)
+          var comparison_value = (compare_value_to == 'first' ? json[0][col] : (row == 0 ? json[row][col] : json[row - 1][col]))
+          var percent = roundNumber(json[row][col] * 100 / comparison_value, 2)
+
+          data.setValue(row, col, percent)
         }
       }
 
