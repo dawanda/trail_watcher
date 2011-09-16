@@ -57,7 +57,7 @@ Total: <%= Trail.count %>
 
         for(var col = 1; col < columns; col++){
           // compare to first or previous value
-          var comparison_value = (compare_value_to == 'first' ? json[0][col] : (row == 0 ? json[row][col] : json[row - 1][col]))
+          var comparison_value = (compare_value_to == 'first' ? json[0][col] : json[row == 0 ? 0 : row - 1][col])
           var percent = roundNumber(json[row][col] * 100 / comparison_value, 2)
 
           data.setValue(row, col, percent)

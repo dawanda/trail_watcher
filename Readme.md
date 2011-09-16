@@ -44,11 +44,9 @@ Mark the visitor as registered user coming from facebook.
     rake spec
     rails s
 
-
 ### Copy production db to local
 
     > mongo
-
     db.copyDatabase('trail_watcher_production', 'trail_watcher_development', HOST-IP [, username[, password]])
 
 Deploy

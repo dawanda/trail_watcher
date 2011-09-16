@@ -42,14 +42,14 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
 <table id="chart">
   <% @selected_paths.each do |path| %>
     <tr>
-      <td class="data-node" colspan="<%= columns %>" data-node="<%= path %>" data-selected="true">
+      <td class="data-node" colspan="<%= columns %>" data-node="<%= path %>" data-node-type="selected">
         <%= path %>
       </td>
     </tr>
   <% end %>
   <tr>
     <% @data.each do |path, percent| %>
-      <td class="data-node" data-node="<%= path %>">
+      <td class="data-node" data-node="<%= path %>" data-node-type="end">
         <%= path %><br/><%= percent.round(2) %>
       </td>
     <% end %>
@@ -58,10 +58,11 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
 
 <script>
   var selected_paths = <%= @selected_paths.to_json.html_safe %>
-  var show = <%= params[:show].to_json.html_safe %>
+  var show = <%= params[:show].to_json.html_safe %> // coming_from/going_to
 
-  function drawPaths(paths){
-    var paths = [''].concat(paths.filter(function(p){return p!=''})).concat([''])
+  function drawPathInputs(paths){
+    var filledPaths = paths.filter(function(p){return p!=''})
+    var paths = [''].concat(filledPaths).concat([''])
     $('#paths').html($.map(paths, function(path){ return '<input type="text" name="paths[]" value="'+path+'" />' }).join('<br/>'))
   }
 
@@ -69,15 +70,18 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
     return $('#paths input').map(function(){ return this.value })
   }
 
-  drawPaths(selected_paths)
+  drawPathInputs(selected_paths)
 
   // load more on click
   $('#chart .data-node').live('click', function(){
     var path = $(this).attr('data-node')
-    if ($(this).attr('data-selected')){
+    // remove already selected paths onclick
+    if ($(this).attr('data-node-type') == 'selected'){
       // remove the path
       selected_paths.remove(path)
-    } else {
+    }
+    // add the endpoint to selected paths
+    else {
       // add the path
       if(show == 'start'){
         selected_paths.unshift(path)
@@ -86,7 +90,7 @@ Total: <%= @full %> / <%= Trail.count %> (<<%= @min %>% ignored)
       }
     }
 
-    drawPaths(selected_paths)
+    drawPathInputs(selected_paths)
     $('#org-form').submit()
   })
 </script>
