@@ -19,7 +19,7 @@ Total: <%= Trail.count %>
     <br/><br/>
 
     Bars <%= params_select_options_tag 'bars', [['% of first','first'], ['% of prev','prev']] %><br/>
-    Paths in between <%= params_select_options_tag 'between', ['',0,1,2,3,4,5] %><br/>
+    Paths in between <%= params_select_options_tag 'between', [['∞', ''],0,1,2,3,4,5] %><br/>
   </div>
 
   <div style="clear:both"></div>
