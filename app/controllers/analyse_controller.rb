@@ -7,14 +7,17 @@ class AnalyseController < ApplicationController
     return unless @selected_paths.present? and @compare.present?
 
     paths = []
+
+    # via form input => [/cart/show, /cart/address] + [all, login]
+    # becomes => [[(/cart/show with all) 100, (/cart/show with login) 50], [(/cart/show;/cart/address with all) 100, (/cart/show;/cart/address with login) 50]
     @data = @selected_paths.map do |path|
       paths << path
 
       counts = @compare.map do |tag|
+        # choose trails betweend from and to
+        # find with expanded paths (regexp)
         scope = Trail.between_dates(params[:from], params[:to], :expand_to => true).with_paths_in_order(paths, :between => params[:between])
-        tags = [(tag == 'all' ? nil : tag), params[:base_tag].presence].compact
-        scope = scope.all_in(:tags => tags) if tags.size > 0
-        scope.count
+        scope.with_all_tags(params[:base_tag], tag).count
       end
 
       [path] + counts

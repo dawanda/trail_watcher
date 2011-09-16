@@ -32,6 +32,15 @@ class Trail
     trail.id
   end
 
+  def self.with_all_tags(*tags)
+    tags = tags.reject{ |tag| tag == 'all' or tag.blank? }
+    if tags.size > 0
+      all_in(:tags => tags)
+    else
+      self
+    end
+  end
+
   def append_path(path)
     self.path += path.gsub(SEPARATOR,'-sep-') + SEPARATOR if path.present?
   end
